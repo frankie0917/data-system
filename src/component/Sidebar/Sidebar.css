@@ -1,0 +1,49 @@
+.Sidebar{
+  display: flex;
+  flex-direction: column;
+  background: var(--main);
+  color: var(--white);
+  /* height: 100vh; */
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  z-index: -2;
+}
+.logo{
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 2rem;
+}
+
+.link-group{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 1rem;
+}
+
+.link-group h3{
+  margin-top: 0;
+  margin-bottom: .2rem;
+  font-weight: bold;
+}
+
+.link-group a{
+  display: block;
+  padding: .5rem 1rem;
+  position: relative;
+}
+
+.link-group a::after{
+  content: "";
+  z-index: -1;
+  position: absolute;
+  display: block;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+}
+
+
