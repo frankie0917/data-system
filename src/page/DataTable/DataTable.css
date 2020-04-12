@@ -1,0 +1,34 @@
+.Data{
+  padding: 1rem;
+  background: var(--white);
+}
+
+hr{
+  margin: 1rem 0 !important;
+}
+
+.Data h1,
+.datagrids h2{
+  margin-bottom: 1rem;
+}
+
+.DataGrid{
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.DataGrid h3{
+  margin: .5rem 0;
+}
+
+.DataGrid .info .operation .edit{
+  color: var(--blue-0);
+}
+.DataGrid .info .operation .delete{
+  color: var(--red-0);
+}
+
+.DataGrid .info {
+  display: flex;
+  justify-content: space-between;
+}

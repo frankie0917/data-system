@@ -3,10 +3,30 @@
   height: 100vh;
   grid-template-columns: minmax(300px,1fr) 5fr;
   grid-template-rows: 1fr;
-  filter: url('#goo');
 }
 
 a{
   text-decoration: none;
   color: inherit;
+}
+
+@font-face {
+  font-family: JGH;
+  font-weight: 100;
+  src: url("./Fonts/HuaKangJinGangHei-UltraLight.ttf");
+}
+@font-face {
+  font-family: JGH;
+  font-weight: normal;
+  src: url("./Fonts/HuaKangJinGangHei-Light.ttf");
+}
+@font-face {
+  font-family: JGH;
+  font-weight: 600;
+  src: url("./Fonts/HuaKangJinGangHei-Semibold.ttf");
+}
+
+* {
+  font-family: JGH;
+  font-weight: 600;
 }
