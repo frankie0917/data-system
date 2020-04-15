@@ -7,28 +7,40 @@ hr{
   margin: 1rem 0 !important;
 }
 
-.Data h1,
 .datagrids h2{
   margin-bottom: 1rem;
 }
 
-.DataGrid{
-  padding: 1rem;
-  margin-bottom: 1rem;
+.detail,
+.detail-header{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: .5rem 1rem;
+  padding-left: 65px;
+  border-bottom: 1px rgba(0, 0, 0, .1) solid;
 }
 
-.DataGrid h3{
-  margin: .5rem 0;
+.detail{
+  color: var(--grey-0);
 }
 
-.DataGrid .info .operation .edit{
-  color: var(--blue-0);
-}
-.DataGrid .info .operation .delete{
-  color: var(--red-0);
-}
-
-.DataGrid .info {
+.datagrid form{
   display: flex;
   justify-content: space-between;
+}
+
+.toolbar{
+  display: flex;
+}
+
+.toolbar :nth-child(1){
+  flex-grow: 2;
+}
+
+.toolbar .icon-wrap{
+  width: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: .5rem;
 }
