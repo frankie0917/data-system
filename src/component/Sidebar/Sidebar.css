@@ -1,5 +1,4 @@
 .Sidebar {
-  padding: 1rem 0px;
   display: flex;
   flex-direction: column;
   background: var(--main);
@@ -10,7 +9,6 @@
 
 .Sidebar:hover{
   width: 250px;
-  padding:  1rem;
 }
 
 .Sidebar:hover .link-group > *{
@@ -24,7 +22,7 @@
   align-items: center;
   opacity: 0.7;
   transition: .2s all ease-in-out;
-  padding: .5rem 0px;
+  padding: .5rem;
 }
 
 .link-group > *:hover, .active-link {
@@ -44,4 +42,8 @@ svg {
 
 .active-link svg{
   fill: var(--main);
+}
+
+.Sidebar:hover h3{
+  margin-left: .5rem;
 }
