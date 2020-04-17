@@ -1,8 +1,7 @@
 .App{
-  display: grid;
-  height: 100vh;
-  grid-template-columns: minmax(300px,1fr) 5fr;
-  grid-template-rows: 1fr;
+  display: flex;
+  min-height: 100vh;
+
 }
 
 a{
@@ -30,3 +29,10 @@ a{
   font-family: JGH;
   font-weight: 600;
 }
+
+.main{
+  height: 100vh;
+  overflow-y: scroll;
+  flex-grow: 1;
+}
+

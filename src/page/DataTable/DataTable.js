@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import "./DataTable.css";
 import { useParams } from "react-router-dom";
 import MaterialTable from "material-table";
@@ -19,11 +19,13 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
-import { useFormik } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 
+import {StateContext} from '../../App';
 // TODO: get data
 export default function DataTable() {
+  const state = useContext(StateContext);
   let tableName = useParams().name;
 
   const DataTableInfo = {
@@ -67,8 +69,8 @@ export default function DataTable() {
     <div className="Data">
       <h1>{DataTableInfo.name}</h1>
       <Divider />
+      <h2>数据表：</h2>
       <div className="datagrids">
-        <h2>数据表：</h2>
         {DataTableInfo.tables.map((table, i) => (
           <DataGrid key={i} tableInfo={table} />
         ))}
@@ -132,14 +134,7 @@ function DataGrid(props) {
       }
     ]
   };
-  const formik = useFormik({
-    initialValues: formInfo.initialValues,
-    validationSchema: formInfo.validationSchema,
-    onSubmit: values => {
-      console.log(values);
-    }
-  });
-  
+
   return (
     <div className="datagrid">
       <MaterialTable
@@ -216,74 +211,85 @@ function DataGrid(props) {
       />
       <Paper style={{ margin: ".2rem 0 1rem 0", padding: "1rem" }}>
         <h3>新增/修改数据</h3>
-        <form onSubmit={formik.handleSubmit} onReset={formik.onReset}>
-          {formInfo.fields.map((field, index) => {
-            switch (field.component) {
-              case "Select":
-                return (
-                  <FormControl
-                    key={index}
-                    error={
-                      formik.touched[field.fieldProps.name] &&
-                      formik.errors[field.fieldProps.name]
-                    }
-                    style={{
-                      width: "10rem"
-                    }}
-                  >
-                    <InputLabel>{field.fieldProps.label}</InputLabel>
-                    <Select
-                      {...field.fieldProps}
-                      value={formik.values[field.fieldProps.name]}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    >
-                      {Object.keys(field.selectValues).map(key => {
-                        return (
-                          <MenuItem key={key} value={key}>
-                            {field.selectValues[key]}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                    <FormHelperText>
-                      {formik.touched[field.fieldProps.name] &&
-                      formik.errors[field.fieldProps.name]
-                        ? formik.errors[field.fieldProps.name]
-                        : ""}
-                    </FormHelperText>
-                  </FormControl>
-                );
-              case "TextField":
-              default:
-                return (
-                  <TextField
-                    key={index}
-                    {...field.fieldProps}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    value={formik.values[field.fieldProps.name]}
-                    error={
-                      formik.touched[field.fieldProps.name] &&
-                      formik.errors[field.fieldProps.name]
-                    }
-                    helperText={
-                      formik.touched[field.fieldProps.name] &&
-                      formik.errors[field.fieldProps.name]
-                        ? formik.errors[field.fieldProps.name]
-                        : ""
-                    }
-                  />
-                );
-            }
-          })}
-          <ButtonGroup>
-            <Button type="submit">提交</Button>
-            <Button type="button" onClick={formik.resetForm}>
-              清除
-            </Button>
-          </ButtonGroup>
-        </form>
+        <Formik
+          initialValues={formInfo.initialValues}
+          validationSchema={formInfo.validationSchema}
+          onSubmit={(values, {setSubmitting})=>{
+
+            setSubmitting(true);
+            setTimeout(()=>{
+              setSubmitting(false);
+              
+            },2000)
+          }}
+        >
+          {({ values, isSubmitting, errors, touched, resetForm }) => (
+            <Form>
+              {formInfo.fields.map((field, index) => {
+                switch (field.component) {
+                  case "Select":
+                    return (
+                      <FormControl
+                        key={index}
+                        error={
+                          touched[field.fieldProps.name] &&
+                          !!errors[field.fieldProps.name]
+                        }
+                        style={{
+                          width: "10rem"
+                        }}
+                      >
+                        <InputLabel>{field.fieldProps.label}</InputLabel>
+                        <Field {...field.fieldProps} as={Select}>
+                          {Object.keys(field.selectValues).map(key => {
+                            return (
+                              <MenuItem key={key} value={key}>
+                                {field.selectValues[key]}
+                              </MenuItem>
+                            );
+                          })}
+                        </Field>
+                        <FormHelperText>
+                          {touched[field.fieldProps.name] &&
+                          !!errors[field.fieldProps.name]
+                            ? errors[field.fieldProps.name]
+                            : ""}
+                        </FormHelperText>
+                      </FormControl>
+                    );
+                  case "TextField":
+                  default:
+                    return (
+                      <Field
+                        {...field.fieldProps}
+                        value={values[field.fieldProps.name]}
+                        error={
+                          touched[field.fieldProps.name] &&
+                          !!errors[field.fieldProps.name]
+                        }
+                        helperText={
+                          touched[field.fieldProps.name] &&
+                          !!errors[field.fieldProps.name]
+                            ? errors[field.fieldProps.name]
+                            : ""
+                        }
+                        key={index}
+                        as={TextField}
+                      />
+                    );
+                }
+              })}
+              <ButtonGroup>
+                <Button type="submit" disabled={isSubmitting}>
+                  提交
+                </Button>
+                <Button type="button" onClick={resetForm}>
+                  清除
+                </Button>
+              </ButtonGroup>
+            </Form>
+          )}
+        </Formik>
       </Paper>
     </div>
   );
