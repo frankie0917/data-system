@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import "./DataTable.css";
 import { useParams } from "react-router-dom";
 import MaterialTable from "material-table";
@@ -22,7 +22,7 @@ import Select from "@material-ui/core/Select";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 
-import {StateContext} from '../../App';
+import { StateContext } from "../../App";
 // TODO: get data
 export default function DataTable() {
   const state = useContext(StateContext);
@@ -89,51 +89,6 @@ export default function DataTable() {
 
 function DataGrid(props) {
   let { tableInfo } = props;
-  const formInfo = {
-    initialValues: {
-      productId: "",
-      color: "",
-      quantity: ""
-    },
-    validationSchema: Yup.object({
-      productId: Yup.string().required("必填项"),
-      color: Yup.string().required("必填项"),
-      quantity: Yup.number().required("必填项")
-    }),
-    fields: [
-      {
-        component: "TextField",
-        fieldProps: {
-          label: "款号",
-          name: "productId",
-          required: true,
-          type: "text"
-        }
-      },
-      {
-        component: "Select",
-        fieldProps: {
-          label: "颜色",
-          name: "color",
-          required: true,
-          type: "text"
-        },
-        selectValues: {
-          0: "绿色",
-          1: "红色"
-        }
-      },
-      {
-        component: "TextField",
-        fieldProps: {
-          label: "数量",
-          name: "quantity",
-          required: true,
-          type: "number"
-        }
-      }
-    ]
-  };
 
   return (
     <div className="datagrid">
@@ -211,86 +166,91 @@ function DataGrid(props) {
       />
       <Paper style={{ margin: ".2rem 0 1rem 0", padding: "1rem" }}>
         <h3>新增/修改数据</h3>
-        <Formik
-          initialValues={formInfo.initialValues}
-          validationSchema={formInfo.validationSchema}
-          onSubmit={(values, {setSubmitting})=>{
-
-            setSubmitting(true);
-            setTimeout(()=>{
-              setSubmitting(false);
-              
-            },2000)
-          }}
-        >
-          {({ values, isSubmitting, errors, touched, resetForm }) => (
-            <Form>
-              {formInfo.fields.map((field, index) => {
-                switch (field.component) {
-                  case "Select":
-                    return (
-                      <FormControl
-                        key={index}
-                        error={
-                          touched[field.fieldProps.name] &&
-                          !!errors[field.fieldProps.name]
-                        }
-                        style={{
-                          width: "10rem"
-                        }}
-                      >
-                        <InputLabel>{field.fieldProps.label}</InputLabel>
-                        <Field {...field.fieldProps} as={Select}>
-                          {Object.keys(field.selectValues).map(key => {
-                            return (
-                              <MenuItem key={key} value={key}>
-                                {field.selectValues[key]}
-                              </MenuItem>
-                            );
-                          })}
-                        </Field>
-                        <FormHelperText>
-                          {touched[field.fieldProps.name] &&
-                          !!errors[field.fieldProps.name]
-                            ? errors[field.fieldProps.name]
-                            : ""}
-                        </FormHelperText>
-                      </FormControl>
-                    );
-                  case "TextField":
-                  default:
-                    return (
-                      <Field
-                        {...field.fieldProps}
-                        value={values[field.fieldProps.name]}
-                        error={
-                          touched[field.fieldProps.name] &&
-                          !!errors[field.fieldProps.name]
-                        }
-                        helperText={
-                          touched[field.fieldProps.name] &&
-                          !!errors[field.fieldProps.name]
-                            ? errors[field.fieldProps.name]
-                            : ""
-                        }
-                        key={index}
-                        as={TextField}
-                      />
-                    );
-                }
-              })}
-              <ButtonGroup>
-                <Button type="submit" disabled={isSubmitting}>
-                  提交
-                </Button>
-                <Button type="button" onClick={resetForm}>
-                  清除
-                </Button>
-              </ButtonGroup>
-            </Form>
-          )}
-        </Formik>
+        <GridForm />
       </Paper>
     </div>
+  );
+}
+
+function GridForm() {
+  // TODO: get color values for each productId
+  const colorValues = {
+    0: "绿色",
+    1: "红色"
+  };
+
+  return (
+    <Formik
+      initialValues={{
+        productId: "",
+        color: "",
+        quantity: ""
+      }}
+      validationSchema={Yup.object({
+        productId: Yup.string().required("必填项"),
+        color: Yup.string().required("必填项"),
+        quantity: Yup.number().required("必填项")
+      })}
+      onSubmit={(values, { setSubmitting }) => {
+        setSubmitting(true);
+        setTimeout(() => {
+          setSubmitting(false);
+        }, 2000);
+      }}
+    >
+      {({ values, isSubmitting, errors, touched, resetForm }) => (
+        <Form>
+          <Field
+            value="productId"
+            error={touched.productId && !!errors.productId}
+            helperText={
+              touched.productId && !!errors.productId ? errors.productId : ""
+            }
+            as={TextField}
+          />
+
+          <FormControl
+            error={touched.color && !!errors.color}
+            style={{
+              width: "10rem"
+            }}
+          >
+            <InputLabel>颜色</InputLabel>
+            <Field as={Select}>
+              {Object.keys(colorValues).map(key => {
+                return (
+                  <MenuItem key={key} value={key}>
+                    {colorValues[key]}
+                  </MenuItem>
+                );
+              })}
+            </Field>
+            <FormHelperText>
+              {touched.color && !!errors.color ? errors.color : ""}
+            </FormHelperText>
+          </FormControl>
+          <Field
+            value={values[field.fieldProps.name]}
+            error={
+              touched[field.fieldProps.name] && !!errors[field.fieldProps.name]
+            }
+            helperText={
+              touched[field.fieldProps.name] && !!errors[field.fieldProps.name]
+                ? errors[field.fieldProps.name]
+                : ""
+            }
+            as={TextField}
+          />
+          <ButtonGroup>
+            <Button type="submit" disabled={isSubmitting}>
+              提交
+            </Button>
+            <Button type="button" onClick={resetForm}>
+              清除
+            </Button>
+          </ButtonGroup>
+        </Form>
+      )}
+    </Formik>
   );
 }
